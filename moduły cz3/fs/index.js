@@ -62,7 +62,6 @@ const fs = require("fs");
 const names = "\njan, kazek";
 fs.readFile("imiona", "utf8", (err, data) => {
   console.log(data);
-
   fs.appendFile("users.txt", names, (err) => {
     if (err) console.log(err);
     else console.log("udało się dolaczyc do pliku");
