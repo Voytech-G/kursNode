@@ -45,10 +45,46 @@ function sendAnswer(answerIndex) {
     .then((data) => handleAnswerFeedback(data));
 }
 
-const buttons = document.querySelectorAll("button");
+const buttons = document.querySelectorAll(".answerBtn");
 for (const button of buttons) {
   button.addEventListener("click", (event) => {
     const answerIndex = event.target.dataset.answer;
     sendAnswer(answerIndex);
   });
 }
+
+const tipDiv = document.querySelector("#tip");
+
+function handleFriendsAnswer(data) {
+  tipDiv.innerText = data.text;
+}
+
+function callFriend() {
+  fetch("/help/friend", {
+    method: "GET",
+  })
+    .then((data) => data.json())
+    .then((data) => handleFriendsAnswer(data));
+}
+document.querySelector("#callFriend").addEventListener("click", callFriend);
+
+function handleHalfOnHalfAnswer(data) {
+  if (typeof data.text === "string") {
+    tipDiv.innerText = data.text;
+  } else {
+    for (const button of buttons) {
+      if (data.answersToRemove.indexOf(button.innerText) > -1) {
+        button.innerText = "";
+      }
+    }
+  }
+}
+
+function halfOnHalf() {
+  fetch("/help/half", {
+    method: "GET",
+  })
+    .then((data) => data.json())
+    .then((data) => handleHalfOnHalfAnswer(data));
+}
+document.querySelector("#halfHalf").addEventListener("click", halfOnHalf);

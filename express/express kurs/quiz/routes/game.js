@@ -66,6 +66,43 @@ function gameRoutes(app) {
       goodAnswers,
     });
   });
+  //odebranie metody callFriend z frontendu
+  app.get("/help/friend", (req, res) => {
+    if (callFriendUsed) {
+      return res.json({
+        text: "To koło zostało wykorzystane",
+      });
+    }
+    callFriendUsed = true;
+    const friendKnowAnswer = Math.random() < 0.5;
+    const actualQuestion = questions[goodAnswers];
+
+    res.json({
+      text: friendKnowAnswer
+        ? `Wydaje mi się, że odpowiedz to ${
+            actualQuestion.answers[actualQuestion.correctAnswer]
+          }`
+        : "Nie mam pojecia",
+    });
+  });
+  app.get("/help/half", (req, res) => {
+    if (halfUsed) {
+      return res.json({
+        text: "To koło zostało wykorzystane",
+      });
+    }
+    halfUsed = true;
+
+    const actualQuestion = questions[goodAnswers];
+    const answersCopy = actualQuestion.answers.filter(
+      (s, index) => index !== actualQuestion.correctAnswer
+    );
+    answersCopy.splice(~~(Math.random() * answersCopy.length));
+
+    res.json({
+      answersToRemove: answersCopy,
+    });
+  });
 }
 
 module.exports = gameRoutes;
