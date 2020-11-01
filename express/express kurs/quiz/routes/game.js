@@ -103,6 +103,29 @@ function gameRoutes(app) {
       answersToRemove: answersCopy,
     });
   });
+  app.get("/help/crowd", (req, res) => {
+    if (questionCrowdUsed) {
+      return res.json({
+        text: "To koło zostało wykorzystane",
+      });
+    }
+    questionCrowdUsed = true;
+
+    const chart = [10, 20, 30, 40];
+    for (let i = chart.length - 1; i > 0; i--) {
+      const change = Math.floor(Math.random() * 20 - 10);
+
+      chart[i] += change;
+      chart[i - 1] -= change;
+    }
+    const actualQuestion = questions[goodAnswers];
+    const { correctAnswer } = actualQuestion;
+    [chart[3], chart[correctAnswer]] = [chart[correctAnswer], chart[3]]; //zamiana dwoch elementów miejscami
+
+    res.json({
+      chart,
+    });
+  });
 }
 
 module.exports = gameRoutes;

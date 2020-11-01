@@ -88,3 +88,25 @@ function halfOnHalf() {
     .then((data) => handleHalfOnHalfAnswer(data));
 }
 document.querySelector("#halfHalf").addEventListener("click", halfOnHalf);
+
+function handleQuestionCrowdAnswer(data) {
+  if (typeof data.text === "string") {
+    tipDiv.innerText = data.text;
+  } else {
+    data.chart.forEach((percent, index) => {
+      buttons[index].innerText =
+        buttons[index].innerText + ": " + percent + "%";
+    });
+  }
+}
+
+function questionCrowd() {
+  fetch("/help/crowd", {
+    method: "GET",
+  })
+    .then((data) => data.json())
+    .then((data) => handleQuestionCrowdAnswer(data));
+}
+document
+  .querySelector("#questionCrowd")
+  .addEventListener("click", questionCrowd);
