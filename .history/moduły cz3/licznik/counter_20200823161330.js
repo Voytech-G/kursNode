@@ -6,4 +6,3 @@ module.exports.add = (number) => {
   counter += number;
   console.log(counter);
 };
-   
